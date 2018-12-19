@@ -15,7 +15,7 @@ headers = {
     "Host": "www.15um.com",
     "Origin": "http://www.15um.com",
     "Referer": "http://www.15um.com/tools/weixin_v.php",
-    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
+    # "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36",
     "X-Requested-With": "XMLHttpRequest"
 }
 api = 'http://www.15um.com/tools/weixin_v.php'
@@ -52,11 +52,11 @@ def download(video):
     filename = video['title'] + ".mp4"
     with open(filename, 'wb') as f:
         video = requests.get(video['url'], stream=True)
-        print("\t开始下载:\t" + filename)
+        print("开始下载:\t" + filename)
         for chunk in video.iter_content(chunk_size=1024):
             if chunk:
                 f.write(chunk)
-        print("\t视频:\t" + filename + "\t 下载完成!")
+        print("下载完成:\t" + filename)
 
 
 def line(wechat_url_list):
@@ -67,12 +67,13 @@ def line(wechat_url_list):
     """
     thread_list = list()
     for url in wechat_url_list:
-        print("开始下载: " + url)
+        print("正在分析: " + url)
         video_list = get_video_list(url)
         for video in video_list:
             print("\t发现视频:" + video.get('title'))
             thread_list.append(threading.Thread(target=download, args=(video,)))
 
+    print("==========================")
     # 启动下载线程
     for thread in thread_list:
         thread.start()
